@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esopus"
+version = "1.0.0"
+description = "Explainable graph neural networks for sediment (turbidity) source tracing in the Upper Esopus Creek watershed, NY"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "George H. Myers" },
+    { name = "Kristen L. Underwood" },
+    { name = "Donna M. Rizzo" },
+    { name = "John T. Kemper" },
+    { name = "Dany Davis" },
+    { name = "Shaurya Swami" },
+    { name = "Scott D. Hamshaw" },
+    { name = "Eric D. Roy" },
+    { name = "Andrew W. Schroth" },
+]
+# Core runtime dependencies (model training, evaluation, interpretation, figures).
+# Exact versions used for the paper are pinned in environment.yml.
+dependencies = [
+    "numpy>=1.26,<2",
+    "pandas>=2.2",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+    "networkx>=3.3",
+    "pyyaml>=6.0",
+    "matplotlib>=3.9",
+    "torch>=2.5",
+    "torch-geometric>=2.6",
+    "torch-spatiotemporal>=0.9.5",
+    "captum>=0.7",
+    "mlflow>=2.16",
+    "joblib>=1.4",
+    "geopandas>=1.0",
+    "pyproj>=3.6",
+]
+
+[project.urls]
+Repository = "https://github.com/ghmyers/esopus-gnn-turbidity"
+Data = "https://doi.org/10.5281/zenodo.23352829"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "jupyterlab>=4", "ipykernel>=6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

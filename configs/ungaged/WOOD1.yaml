@@ -1,0 +1,47 @@
+# =============================================================================
+# Leave-one-out ungaged validation, fold WOOD1 (node 29)
+# Identical to graphwavenet_full.yaml; node 29's TRAIN-period turbidity is set to NaN
+# =============================================================================
+#   python scripts/15_ungaged_validation.py --only WOOD1
+#
+# These hyper-parameters reproduce the published checkpoint
+# (archived as outputs/models/gwn_ungaged_WOOD1.pt).
+
+experiment:
+  run_name: gwn_ungaged_WOOD1                # prefix for every artefact this run writes
+  mlflow_experiment: esopus_turbidity_ungaged
+  notes: "Ungaged validation fold WOOD1: node 29 turbidity withheld from the training split"
+
+data:
+  graph_pkl: data/processed/esopus_graph_features.pkl   # output of scripts/06
+  test_split_date: "2023-09-19"      # train < split date <= test
+  num_timesteps_in: 17               # 17-h input window (the dilated convolutions use only the last 7 h; docs/KNOWN_ISSUES.md)
+  num_timesteps_out: 1               # one-step-ahead (1 h) prediction
+  eps: 0.00001                       # separates observed zeros from the 0.0 missing-value sentinel
+
+loader:
+  batch_size: 32
+  drop_last_train: true              # avoids a tiny final batch skewing batch-norm statistics
+  num_workers: 0
+
+model:
+  hidden_channels: 16                # WaveNet residual channels
+  ff_channels: 32                    # feed-forward (skip/readout) channels
+  n_layers: 4                        # dilated temporal conv + graph conv blocks
+  adjacency_mode: both               # NHD adjacency + learned softmax(relu(E1 E2^T))
+  embedding_dim: 10                  # node-embedding size for the learned adjacency
+
+training:
+  num_epochs: 75
+  learning_rate: 0.0003              # Adam, cosine-annealed to 1% of this value
+  optimizer: adam
+  weight_decay: 0.0
+  patience: 15                       # early-stopping patience (epochs)
+  min_delta: 0.0
+  grad_clip_norm: 1.0
+  mask_val: 0.0                      # scaled value marking missing targets
+  seed: 0
+  eval_interval: 5                   # epochs between full per-node metric evaluations
+
+ungaged:
+  withheld_node: 29               # training-period y set to NaN before scaling; test period untouched

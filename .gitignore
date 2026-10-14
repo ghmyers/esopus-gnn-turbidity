@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Environment / secrets
+.env
+.venv/
+venv/
+
+# Data and generated outputs (see data/README.md for how to obtain them)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+outputs/
+figures/
+mlruns/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

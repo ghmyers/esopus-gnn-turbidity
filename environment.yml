@@ -1,0 +1,40 @@
+# Conda environment used to produce the results in the paper.
+#
+#   conda env create -f environment.yml
+#   conda activate esopus-gnn
+#   pip install -e ".[dev]"
+#
+# Versions below are the exact versions the published results were produced
+# with (Python 3.11.9, CUDA 12.4). CPU-only users can drop `pytorch-cuda`.
+name: esopus-gnn
+channels:
+  - pytorch          # must come before conda-forge so the CUDA build of torch is used
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pytorch=2.5.1
+  - pytorch-cuda=12.4
+  - mkl<2025         # pytorch 2.5 + mkl 2025 import error workaround
+  - numpy=1.26.4
+  - pandas=2.3.3
+  - scipy=1.17.1
+  - scikit-learn=1.8.0
+  - networkx=3.6.1
+  - pyyaml=6.0.3
+  - matplotlib=3.10.8
+  - joblib=1.5.3
+  # --- sub-watershed polygons (Figure 5) ---
+  - geopandas=1.1.3
+  - shapely=2.1.2
+  - pyproj=3.6.1
+  # --- dev ---
+  - pytest
+  - jupyterlab
+  - ipykernel
+  - pip
+  - pip:
+      - torch-geometric==2.7.0
+      - torch-spatiotemporal==0.9.5
+      - captum==0.8.0
+      - mlflow==3.10.1
